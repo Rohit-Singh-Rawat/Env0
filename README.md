@@ -68,10 +68,10 @@ Make sure to set up your environment variables properly in your production envir
 
 ### Current Progress
 
-- ✅ Basic project setup with T3 Stack
-- ✅ Authentication foundation with Better Auth
-- ✅ Database setup with Prisma and PostgreSQL
-- ✅ Basic UI structure with Tailwind CSS
+- [x] Basic project setup with T3 Stack
+- [x] Authentication foundation with Better Auth
+- [x] Database setup with Prisma and PostgreSQL
+- [x] Basic UI structure with Tailwind CSS
 
 ### TODO: Backend Development
 
