@@ -26,6 +26,7 @@ model User {
   emailVerified Boolean
   image         String?
   createdAt     DateTime
+  
   updatedAt     DateTime
   sessions      Session[]
   accounts      Account[]
@@ -92,6 +93,7 @@ model Organization {
   createdAt   DateTime
   metadata    String?
   members     Member[]
+  sudoPassword String?
   invitations Invitation[]
 
   @@unique([slug])

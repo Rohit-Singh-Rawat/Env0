@@ -12,7 +12,7 @@ const page = (props: Props) => {
 					variant='full'
 				/>
 			</div>
-			<div className='p-2.5 border-2 border-border/20 rounded-3xl bg-card/70 backdrop-blur-sm  backdrop-blur-md '>
+			<div className='p-2.5 border-2 border-border/20 rounded-3xl bg-card/70  backdrop-blur-md '>
 				<Card className='w-full max-w-md border-border/40 py-14 shadow-[0_4px_20px_rgba(0,2,0,0.95)] '>
 					<CardHeader className='space-y-2 text-center'>
 						<CardTitle className='text-2xl font-semibold'>Welcome Back</CardTitle>
