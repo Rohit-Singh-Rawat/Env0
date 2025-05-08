@@ -1,7 +1,7 @@
 import '@/styles/globals.css';
 
 import type { Metadata } from 'next';
-import { Geist } from 'next/font/google';
+import { Geist_Mono } from 'next/font/google';
 
 import { TRPCReactProvider } from '@/trpc/react';
 import { Toaster } from '@/components/ui/sonner';
@@ -11,21 +11,21 @@ export const metadata: Metadata = {
 	description: 'Streamlined environment variable management for developers',
 };
 
-const geist = Geist({
+const geistMono = Geist_Mono({
 	subsets: ['latin'],
-	variable: '--font-geist-sans',
+	variable: '--font-geist-mono',
 });
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
 	return (
 		<html
 			lang='en'
-			className={`${geist.className}`}
+			className={`${geistMono.className}`}
 		>
 			<head>
 				<meta
 					name='apple-mobile-web-app-title'
-					content='MyWebSite'
+					content='Env0'
 				/>
 			</head>
 			<body>

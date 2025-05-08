@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowRight } from 'lucide-react';
@@ -16,25 +16,67 @@ import {
 } from '@/components/ui/form';
 
 import StepHeader from './StepHeader';
-import type { OrganizationStepProps, OrganizationFormValues } from './types';
+import type { OrganizationFormValues } from './types';
 import { organizationFormSchema } from './types';
-
+import { toast } from 'sonner';
+import { api } from '@/trpc/react';
+import { getSlugFromName } from '@/lib/utils';
+import { useRouter } from 'next/navigation';
 /**
  * Organization details step of the onboarding process
  */
-const OrganizationStep: React.FC<OrganizationStepProps> = ({ isLoading, onNext }) => {
+const OrganizationStep: React.FC = () => {
+	const router = useRouter();
+	const { mutate: checkOrganizationSlug, isPending } =
+		api.organization.checkOrganizationSlug.useMutation({
+			onSuccess: ({ status }) => {
+				if (status) {
+					createOrganization({
+						name: form.getValues().organizationName,
+						slug: form.getValues().slug,
+					});
+				} else {
+					toast.error('Slug is not available');
+				}
+			},
+			onError: () => {
+				toast.error('Failed to check slug availability');
+			},
+		});
+	const { mutate: createOrganization, isPending: isCreatingOrganization } =
+		api.organization.createOrganization.useMutation({
+			onSuccess: () => {
+				toast.success('Organization created successfully');
+				router.push('/on-boarding/security');
+			},
+			onError: () => {
+				toast.error('Failed to create organization');
+			},
+		});
+
 	// Initialize form
 	const form = useForm<OrganizationFormValues>({
 		resolver: zodResolver(organizationFormSchema),
 		defaultValues: {
 			organizationName: '',
-			organizationDescription: '',
+			slug: '',
 		},
 	});
 
+	// Watch organization name to auto-generate slug
+	const organizationName = form.watch('organizationName');
+
+	// Auto-update slug when organization name changes
+	useEffect(() => {
+		if (organizationName) {
+			const generatedSlug = getSlugFromName(organizationName);
+			form.setValue('slug', generatedSlug);
+		}
+	}, [organizationName, form]);
+
 	// Form submission handler
-	const handleSubmit = (data: OrganizationFormValues) => {
-		onNext(data);
+	const handleSubmit = async (data: OrganizationFormValues) => {
+		checkOrganizationSlug({ slug: data.slug });
 	};
 
 	return (
@@ -44,8 +86,8 @@ const OrganizationStep: React.FC<OrganizationStepProps> = ({ isLoading, onNext }
 				onSubmit={form.handleSubmit(handleSubmit)}
 			>
 				<StepHeader
-					title='Organization Details'
-					subtitle="Let's set up your organization to get started with Env0"
+					title='Create Organization'
+					subtitle="Let's set up your organization to get started"
 				/>
 
 				<FormField
@@ -70,19 +112,22 @@ const OrganizationStep: React.FC<OrganizationStepProps> = ({ isLoading, onNext }
 
 				<FormField
 					control={form.control}
-					name='organizationDescription'
+					name='slug'
 					render={({ field }) => (
 						<FormItem className='transition-all duration-200 hover:shadow-sm'>
-							<FormLabel className='text-sm font-medium'>Description (Optional)</FormLabel>
+							<FormLabel className='text-sm font-medium'>
+								URL Slug <span className='text-red-500'>*</span>
+							</FormLabel>
 							<FormControl>
 								<Input
 									{...field}
-									placeholder='Briefly describe your organization'
+									placeholder='organization-slug'
 									className='focus-visible:ring-primary/50 transition-all'
 								/>
 							</FormControl>
 							<FormDescription className='text-xs'>
-								This helps identify your organization's purpose
+								This will be used in your organization's URL: {window.location.hostname}/
+								<strong>{field.value || 'your-slug'}</strong>
 							</FormDescription>
 							<FormMessage />
 						</FormItem>
@@ -92,13 +137,13 @@ const OrganizationStep: React.FC<OrganizationStepProps> = ({ isLoading, onNext }
 				<div className='flex justify-end pt-6'>
 					<Button
 						type='submit'
-						disabled={isLoading}
-						loading={isLoading}
+						disabled={isPending || isCreatingOrganization}
+						loading={isPending || isCreatingOrganization}
 						loadingText='Processing...'
 						className='group'
 					>
 						<span className='flex items-center'>
-							Next
+							Create Organization
 							<ArrowRight
 								size={16}
 								className='ml-2 group-hover:translate-x-1 transition-transform'

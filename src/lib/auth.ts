@@ -10,6 +10,41 @@ export const auth = betterAuth({
 	database: prismaAdapter(prisma, {
 		provider: 'postgresql', // or "mysql", "postgresql", ...etc
 	}),
+	databaseHooks: {
+		session: {
+			create: {
+				before: async (session) => {
+					const user = await prisma.user.findUnique({
+						where: {
+							id: session.userId
+						},
+						select: {
+							defaultOrganizationSlug: true
+						}
+					});
+					
+					if (user?.defaultOrganizationSlug) {
+						const organization = await prisma.organization.findFirst({
+							where: {
+								slug: user.defaultOrganizationSlug
+							},
+							select: {
+								id: true
+							}
+						});
+
+						return {
+							data: {
+								...session,
+								activeOrganizationId: organization?.id,
+							},
+						};
+					}
+					return { data: session };
+				},
+			}
+		}
+	},
 	plugins: [organization()],
 	socialProviders: {
 		github: {
@@ -19,6 +54,6 @@ export const auth = betterAuth({
 		google: {
 			clientId: env.GOOGLE_CLIENT_ID,
 			clientSecret: env.GOOGLE_CLIENT_SECRET,
-		},
-	},
+		}
+	}
 });

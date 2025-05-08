@@ -1,50 +1,39 @@
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
 interface LoadingSpinnerProps {
 	className?: string;
 	color?: string;
-	size?: string;
-	speed?: number;
-	dotCount?: number;
 }
 
-export function LoadingSpinner({
-	className,
-	color,
-	size = "5",
-	speed = 0.6,
-	dotCount = 12
+export function LoadingSpinner({ 
+	className, 
+	color = 'var(--primary)',
 }: LoadingSpinnerProps) {
 	return (
-		<div className={cn(`h-${size} w-${size}`, className)}>
+		<div className={cn('h-5 w-5', className)}>
 			<div
 				style={{
 					position: 'relative',
 					top: '50%',
 					left: '50%',
-          
 				}}
-				className={cn('loading-spinner', `h-${size} w-${size}`, className)}
+				className={cn('loading-spinner', 'h-5 w-5', className)}
 			>
-				{[...Array(dotCount)].map((_, i) => (
+				{[...Array(12)].map((_, i) => (
 					<div
 						key={i}
 						style={{
-							animationDelay: `${-0.7 + (0.7 / dotCount) * i}s`,
+							animationDelay: `${-0.7 + 0.057 * i}s`,
+							background: color,
 							position: 'absolute',
 							borderRadius: '1rem',
 							width: '27%',
 							height: '7%',
 							left: '-8%',
 							top: '-3%',
-							transform: `rotate(${(360 / dotCount) * i}deg) translate(130%)`,
-							background: color,
-							animationDuration: `${speed}s`
+							transform: `rotate(${30 * i}deg) translate(130%)`,
 						}}
-						className={cn(
-							'animate-spinner',
-							!color && 'bg-primary/70 dark:bg-primary/90'
-						)}
+						className='animate-[spinner_0.6s_linear_infinite]'
 					/>
 				))}
 			</div>

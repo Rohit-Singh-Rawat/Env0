@@ -3,14 +3,14 @@ import * as z from 'zod';
 // Zod Schemas
 export const organizationFormSchema = z.object({
 	organizationName: z.string().min(1, { message: 'Organization name is required' }),
-	organizationDescription: z.string().optional(),
+	slug: z.string().min(1, { message: 'Slug is required' }),
 });
 
 export const securityFormSchema = z
 	.object({
-		autoGeneratePassword: z.boolean().default(false),
 		sudoPassword: z.string().min(8, { message: 'Password must be at least 8 characters' }),
 		confirmPassword: z.string(),
+		autoGeneratePassword: z.boolean().default(false),
 	})
 	.refine((data) => data.sudoPassword === data.confirmPassword, {
 		message: 'Passwords do not match',
@@ -23,10 +23,7 @@ export type SecurityFormValues = z.infer<typeof securityFormSchema>;
 
 export interface FormData {
 	organizationName: string;
-	organizationDescription: string;
-	sudoPassword: string;
-	autoGeneratePassword: boolean;
-	confirmPassword: string;
+	slug: string;
 }
 
 // Component Props
@@ -35,10 +32,6 @@ export interface StepHeaderProps {
 	subtitle?: string;
 }
 
-export interface OrganizationStepProps {
-	isLoading: boolean;
-	onNext: (data: OrganizationFormValues) => void;
-}
 
 export interface SecurityStepProps {
 	isLoading: boolean;

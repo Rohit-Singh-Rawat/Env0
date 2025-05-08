@@ -5,12 +5,13 @@ import { Button } from '@/components/ui/button';
 import Env0Logo from '@/components/shared/Logo';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { IconBrandGithub, IconBrandTwitter, IconPlus, IconFileDescription, IconUser } from '@tabler/icons-react';
+import Loading from '@/components/shared/loading';
 
 export default function Home() {
 	return (
 		<main className='min-h-screen bg-background text-foreground'>
 			{/* Navbar */}
-			<nav className='flex items-center justify-between px-6 py-4 border-b border-border/20 backdrop-blur-sm sticky top-0 z-10 bg-background/80'>
+			<nav className='flex items-center justify-between px-6 py-4 border-b border-primary/20 backdrop-blur-sm sticky top-0 z-10 bg-background/80 '>
 				<div className='flex items-center'>
 					<Link
 						href='https://github.com'
@@ -19,7 +20,7 @@ export default function Home() {
 						className='text-foreground hover:text-foreground/80 transition-colors'
 						aria-label='GitHub'
 					>
-						<IconBrandGithub className='size-5' />
+						<IconBrandGithub className='size-5 text-muted-foreground' />
 					</Link>
 					<Link
 						href='https://twitter.com'
@@ -28,7 +29,7 @@ export default function Home() {
 						className='text-foreground hover:text-foreground/80 transition-colors ml-4'
 						aria-label='Twitter'
 					>
-						<IconBrandTwitter className='size-5' />
+						<IconBrandTwitter className='size-5 text-muted-foreground' />
 					</Link>
 				</div>
 				<div className='flex items-center justify-center'>
@@ -37,9 +38,10 @@ export default function Home() {
 						aria-label='Home'
 					>
 						<Env0Logo
-							size='md'
+							size='sm'
 							variant='small'
 						/>
+						
 					</Link>
 				</div>
 				<div>
@@ -56,17 +58,16 @@ export default function Home() {
 			<section className='py-24 px-4 md:px-6 lg:px-8 bg-gradient-to-b from-background to-background/95'>
 				<div className='max-w-5xl mx-auto text-center'>
 					<div className='mb-16 p-4 md:p-8 rounded-2xl border border-border/30 bg-card/50 backdrop-blur-sm shadow-lg'>
-						<h1 className='text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6'>
-							Self-Service <span className='text-primary'>Cloud</span> Environments
+						<h1 className='text-4xl md:text-5xl lg:text-6xl font-normal tracking-tight mb-6'>
+							Simplified <span className='text-primary'>Environment</span> Management
 						</h1>
 						<p className='text-lg md:text-xl text-muted-foreground mb-10 max-w-3xl mx-auto'>
-							Empower your developers with on-demand cloud environments for development, testing, and
-							production.
+							env0 eliminates the hassle of updating environments on VPS and other platforms, making deployment seamless and efficient.
 						</p>
 						<div className='flex flex-col sm:flex-row justify-center gap-4'>
 							<Button
 								size='lg'
-								className='bg-primary hover:bg-primary/90 shadow-md border border-primary/50 text-white text-shadow'
+								className='bg-primary hover:bg-primary/90 shadow-md border border-primary/50 text-white text-shadow-2xs text-shadow-black/50'
 							>
 								Get Started
 							</Button>
@@ -86,11 +87,11 @@ export default function Home() {
 								<div className='bg-primary/10 text-primary size-12 rounded-lg mb-4 flex items-center justify-center mx-auto border border-primary/20'>
 									<IconPlus className='size-6' />
 								</div>
-								<CardTitle className='text-xl font-semibold text-center'>Instant Environments</CardTitle>
+								<CardTitle className='text-xl font-semibold text-center'>Hassle-Free Deployment</CardTitle>
 							</CardHeader>
 							<CardContent>
 								<p className='text-muted-foreground text-center'>
-									Spin up fully configured environments in minutes, not days.
+									Update environments with a single click, no more manual VPS configurations.
 								</p>
 							</CardContent>
 						</Card>
@@ -99,11 +100,11 @@ export default function Home() {
 								<div className='bg-primary/10 text-primary size-12 rounded-lg mb-4 flex items-center justify-center mx-auto border border-primary/20'>
 									<IconFileDescription className='size-6' />
 								</div>
-								<CardTitle className='text-xl font-semibold text-center'>Cost Optimization</CardTitle>
+								<CardTitle className='text-xl font-semibold text-center'>Automated Updates</CardTitle>
 							</CardHeader>
 							<CardContent>
 								<p className='text-muted-foreground text-center'>
-									Automatically shut down idle environments to reduce cloud costs.
+									Schedule environment updates and forget about manual maintenance tasks.
 								</p>
 							</CardContent>
 						</Card>
@@ -112,11 +113,11 @@ export default function Home() {
 								<div className='bg-primary/10 text-primary size-12 rounded-lg mb-4 flex items-center justify-center mx-auto border border-primary/20'>
 									<IconUser className='size-6' />
 								</div>
-								<CardTitle className='text-xl font-semibold text-center'>Developer Friendly</CardTitle>
+								<CardTitle className='text-xl font-semibold text-center'>Simplified Management</CardTitle>
 							</CardHeader>
 							<CardContent>
 								<p className='text-muted-foreground text-center'>
-									Simple interface designed for developers, not cloud experts.
+									Manage all your environments from one intuitive dashboard, no technical expertise required.
 								</p>
 							</CardContent>
 						</Card>

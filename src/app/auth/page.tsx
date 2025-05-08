@@ -8,7 +8,7 @@ const page = (props: Props) => {
 		<div className='flex h-screen w-screen items-center justify-center bg-background flex-col gap-6 p-4'>
 			<div className='mb-2'>
 				<Env0Logo
-					size='md'
+					size='sm'
 					variant='full'
 				/>
 			</div>

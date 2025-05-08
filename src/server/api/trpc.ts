@@ -6,11 +6,11 @@
  * TL;DR - This is where all the tRPC server stuff is created and plugged in. The pieces you will
  * need to use are documented accordingly near the end.
  */
-import { initTRPC } from "@trpc/server";
-import superjson from "superjson";
-import { ZodError } from "zod";
-
-import { db } from "~/server/db";
+import { initTRPC, TRPCError } from '@trpc/server';
+import superjson from 'superjson';
+import { ZodError } from 'zod';
+import { db } from '../db';
+import { auth } from '@/lib/auth';
 
 /**
  * 1. CONTEXT
@@ -27,6 +27,7 @@ import { db } from "~/server/db";
 export const createTRPCContext = async (opts: { headers: Headers }) => {
 	return {
 		db,
+		auth,
 		...opts,
 	};
 };
@@ -45,8 +46,7 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
 			...shape,
 			data: {
 				...shape.data,
-				zodError:
-					error.cause instanceof ZodError ? error.cause.flatten() : null,
+				zodError: error.cause instanceof ZodError ? error.cause.flatten() : null,
 			},
 		};
 	},
@@ -104,3 +104,23 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
  * are logged in.
  */
 export const publicProcedure = t.procedure.use(timingMiddleware);
+
+export const protectedProcedure = t.procedure.use(async ({ next, ctx }) => {
+	const session = await ctx.auth.api.getSession({
+		headers: ctx.headers,
+	});
+	if (!session) {
+		throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Unauthorized' });
+	}
+	return next({ ctx: { session } });
+});
+
+export const organizationProcedure = protectedProcedure.use(async ({ next, ctx }) => {
+	const session = await ctx.auth.api.getSession({
+		headers: ctx.headers,
+	});
+	if (!session) {
+		throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Unauthorized' });
+	}
+	return next({ ctx: { session } });
+});
