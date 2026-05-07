@@ -53,7 +53,7 @@ const blogMetadata = {
   title: "Introducing Envval",
   subtitle:
     "After building countless projects, I finally decided to fix the one problem that kept haunting me.",
-  publishedAt: "2024-12-15",
+  publishedAt: "2026-02-10",
   readingTime: "6 min read",
   coverImage: "/images/blog/introducing-envval/cover.png",
   author: {
